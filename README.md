@@ -45,12 +45,15 @@ ollama pull nomic-embed-text
 
 
 Start the Ollama server:
+
 ollama run deepseek-r1:1.5b
 
 Run the app:
+
 streamlit run app.py
 
 🧪 Usage:
+
 1 - Upload your lecture file pdf.
 
 2 - The app automatically extracts content and generates a summary.
@@ -60,19 +63,25 @@ streamlit run app.py
 Get intelligent, context-aware answers in real time.
 
 🎥 Showcase:
+
 ✅ Example Workflow
-🔹 Input: Lecture on Machine Learning
- - Upload: ml_lecture.pdf
+🔹 Input:
+
+Lecture on Machine Learning - Upload: ml_lecture.pdf
 
 🔹 Output:
+
 . Summary:
+
 "Covers supervised learning, overfitting, and model regularization."
 
 . Questions:
+
 Q: Why do decision trees overfit?
 A: Because they can create overly complex splits that memorize training data.
 
 🛠️ Customization:
+
 🔧 Swap models in ollama run (e.g., llama2, gemma, mistral)
 
 🧩 Extend with tools like vector search (e.g., ChromaDB or FAISS)
@@ -80,4 +89,5 @@ A: Because they can create overly complex splits that memorize training data.
 💬 Add memory for long conversations via LangChain's ConversationBufferMemory
 
 📃 License:
+
 MIT License — free to use, modify, and distribute.
