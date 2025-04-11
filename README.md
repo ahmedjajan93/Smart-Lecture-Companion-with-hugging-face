@@ -1,9 +1,11 @@
 🎓 Smart Lecture Companion with Ollama:
+
 A local-first AI-powered assistant that helps users understand, summarize, and interact with lecture content using LangChain and Ollama.
 
 Built for students, educators, and researchers who want intelligent insights from their lecture material without depending on the cloud.
 
 ✨ Features:
+
 🧠 Contextual Q&A — Ask deep, meaningful questions about your lecture content.
 
 📝 Automatic Summarization — Extract concise summaries and bullet points.
@@ -15,6 +17,7 @@ Built for students, educators, and researchers who want intelligent insights fro
 
 
 📦 Tech Stack:
+
 LangChain — for chain-based LLM workflows.
 
 Ollama — to run LLMs locally (e.g. LLaMA, Mistral, or Gemma).
@@ -24,16 +27,20 @@ Streamlit — for a fast and interactive UI.
 Python — core logic and orchestration.
 
 ⚙️ Installation:
-Clone the repo: git clone https://github.com/yourusername/smart-lecture-companion.git
+
+Clone the repo: git clone https://github.com/ahmedjajan93/Smart-Lecture-Companion-with-ollama.git
 cd smart-lecture-companion
 
 Install dependencies:
+
 pip install -r requirements.txt
 
 Install & start Ollama:
+
 ollama pull deepseek-r1:1.5b 
 
 For embeddings:
+
 ollama pull nomic-embed-text 
 
 
