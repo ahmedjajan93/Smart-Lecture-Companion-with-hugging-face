@@ -54,7 +54,7 @@ if uploaded_file:
     if st.button("Generate Summary"):
         summary_prompt = "Summarize the most important points from this lecture."
         summary = qa.run(summary_prompt)
-        st.success(summary_prompt)
+        st.success(summary)
 
     st.header("🧠 Auto-Generated Flashcards")
     if st.button("Create Flashcards"):
