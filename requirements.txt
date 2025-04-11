@@ -1,0 +1,13 @@
+streamlit 
+langchain
+langchain-community
+python-dotenv
+pydantic 
+fastapi==0.95.0
+uvicorn[gunicorn]==0.18.2
+fastapi==0.95.0
+gunicorn==20.1.0
+faiss-cpu
+tf-keras[user]
+
+
