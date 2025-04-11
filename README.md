@@ -78,6 +78,7 @@ Lecture on Machine Learning - Upload: ml_lecture.pdf
 . Questions:
 
 Q: Why do decision trees overfit?
+
 A: Because they can create overly complex splits that memorize training data.
 
 🛠️ Customization:
