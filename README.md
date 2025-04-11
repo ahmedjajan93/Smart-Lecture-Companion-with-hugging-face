@@ -44,7 +44,7 @@ For embeddings:
 ollama pull nomic-embed-text 
 
 
-# Start the Ollama server
+Start the Ollama server:
 ollama run deepseek-r1:1.5b
 
 Run the app:
