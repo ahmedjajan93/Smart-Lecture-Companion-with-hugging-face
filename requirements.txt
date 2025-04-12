@@ -5,5 +5,7 @@ python-dotenv
 PyMuPDF
 sentence-transformers
 torch
+faiss-gpu
+faiss-cpu
 
 
