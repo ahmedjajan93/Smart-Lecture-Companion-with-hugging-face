@@ -41,7 +41,7 @@ if uploaded_file:
 
     # Set up QA system
     llm = HuggingFaceHub(
-    repo_id="HuggingFaceH4/zephyr-7b-beta",
+    repo_id="google/gemma-2b-it",
     huggingfacehub_api_token=hf_token
 )
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
