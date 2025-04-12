@@ -63,16 +63,16 @@ llm = HuggingFacePipeline(pipeline=rag_pipeline)
 
 
 
-    qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
+qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
-    st.header("Ask Questions About Your Lecture 📖")
-    query = st.text_input("What would you like to know?")
+t.header("Ask Questions About Your Lecture 📖")
+query = st.text_input("What would you like to know?")
 
-    if query:
-        answer = qa.run(query)
-        cleaned = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL)
+if query:
+    answer = qa.run(query)
+    cleaned = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL)
        
-        st.write("**Answer:**", cleaned)
+    st.write("**Answer:**", cleaned)
 
     st.header("✨ Key Points Summary")
     if st.button("Generate Summary"):
