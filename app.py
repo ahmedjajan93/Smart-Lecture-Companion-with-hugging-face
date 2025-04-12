@@ -15,6 +15,8 @@ import torch
 from langchain.llms import Ollama
 import re
 
+from huggingface_hub import login
+login()
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
