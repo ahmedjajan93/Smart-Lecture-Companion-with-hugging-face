@@ -17,9 +17,7 @@ import re
 
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.environ.get('HUGGINGFACEHUB_API_TOKEN')
-hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-
+os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
 st.title("📚 Smart Lecture Companion")
 
