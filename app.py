@@ -1,5 +1,3 @@
-# smart_lecture_companion/app.py
-
 import streamlit as st
 from PIL import Image
 from langchain.chains import RetrievalQA
@@ -8,21 +6,23 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import tempfile
-from transformers import pipeline
-from langchain_community.llms import HuggingFaceHub
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 from langchain.llms import HuggingFacePipeline
 import os
 import torch
 import re
 
-
+# Set up Hugging Face API token securely (using Streamlit Secrets Manager)
+hf_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+if not hf_token:
+    st.error("Hugging Face API token not found. Please configure it in Streamlit Secrets.")
+    st.stop()
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-hf_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
 st.title("📚 Smart Lecture Companion")
 
+# File upload
 uploaded_file = st.file_uploader("Upload Lecture Notes or Slides (PDF)", type=["pdf"])
 
 if uploaded_file:
@@ -40,46 +40,50 @@ if uploaded_file:
 
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     db = FAISS.from_documents(chunks, embeddings)
-  
 
-model_name = "google/flan-t5-large"
+    # Model loading with error handling
+    model_name = "google/flan-t5-large"
+    try:
+        # Manually load tokenizer and model
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
-# Manually load tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+        # Set up pipeline
+        rag_pipeline = pipeline(
+            "text2text-generation",
+            model=model,
+            tokenizer=tokenizer,
+            max_length=512,
+            do_sample=True,
+            temperature=0.7
+        )
 
-# Set up pipeline
-rag_pipeline = pipeline(
-    "text2text-generation",
-    model=model,
-    tokenizer=tokenizer,
-    max_length=512,
-    do_sample=True,
-    temperature=0.7
-)
+        # Wrap in LangChain LLM interface
+        llm = HuggingFacePipeline(pipeline=rag_pipeline)
 
-# Wrap in LangChain LLM interface
-llm = HuggingFacePipeline(pipeline=rag_pipeline)
+    except Exception as e:
+        st.error(f"❌ Failed to load model: {e}")
+        st.stop()
 
+    # Set up QA system
+    qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
+    st.header("Ask Questions About Your Lecture 📖")
+    query = st.text_input("What would you like to know?")
 
-qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
+    if query:
+        answer = qa.run(query)
+        cleaned = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL)
+        st.write("**Answer:**", cleaned)
 
-st.header("Ask Questions About Your Lecture 📖")
-query = st.text_input("What would you like to know?")
-
-if query:
-    answer = qa.run(query)
-    cleaned = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL)
-       
-    st.write("**Answer:**", cleaned)
-
+    # Key Points Summary
     st.header("✨ Key Points Summary")
     if st.button("Generate Summary"):
         summary_prompt = "Summarize the most important points from this lecture."
         summary = qa.run(summary_prompt)
         st.success(summary)
 
+    # Auto-generated Flashcards
     st.header("🧠 Auto-Generated Flashcards")
     if st.button("Create Flashcards"):
         flashcard_prompt = "Generate 5 flashcards from this lecture with questions and answers."
