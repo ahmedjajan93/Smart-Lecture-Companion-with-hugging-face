@@ -5,10 +5,11 @@ from PIL import Image
 from langchain.chains import RetrievalQA
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.document_loaders import PyPDFLoader
-from langchain.llms import HuggingFaceHub
+from langchain.document_loaders import PyMuPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 import tempfile
-from langchain_community.embeddings import OllamaEmbeddings
+from transformers import pipeline
+from langchain.llms import HuggingFacePipeline
 import os
 import torch
 from langchain.llms import Ollama
@@ -30,15 +31,17 @@ if uploaded_file:
     st.success("File uploaded successfully!")
 
     # Load and embed the document
-    loader = PyPDFLoader(tmp_path)
+    loader = PyMuPDFLoader(tmp_path)
     documents = loader.load()
+    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    chunks = splitter.split_documents(documents)
 
-    embeddings = OllamaEmbeddings(model='nomic-embed-text') 
-    db = FAISS.from_documents(documents, embeddings)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    db = FAISS.from_documents(chunks, embeddings)
 
     # Set up QA system
-   # Initialize Ollama (cached)
-    llm = Ollama(model="deepseek-r1:1.5b")
+    rag_pipeline = pipeline("text2text-generation", model="google/flan-t5-base", max_length=512)
+    llm = HuggingFacePipeline(pipeline=rag_pipeline)
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
     st.header("Ask Questions About Your Lecture 📖")
