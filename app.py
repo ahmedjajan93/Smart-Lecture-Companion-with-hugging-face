@@ -41,7 +41,7 @@ if uploaded_file:
 
     # Set up QA system
     llm = HuggingFaceHub(
-    repo_id="mistralai/Mistral-7B-Instruct-v0.2",
+    repo_id="TheBloke/Mistral-7B-Instruct-v0.2-GGUF",
     huggingfacehub_api_token=hf_token
 )
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
