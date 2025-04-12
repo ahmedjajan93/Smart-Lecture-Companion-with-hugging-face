@@ -17,7 +17,13 @@ import re
 
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+if hf_token is None:
+    st.error("🚨 Hugging Face API token not found in environment variables.")
+    st.stop()
+else:
+    os.environ["HUGGINGFACEHUB_API_TOKEN"] = hf_token
+
 
 
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
