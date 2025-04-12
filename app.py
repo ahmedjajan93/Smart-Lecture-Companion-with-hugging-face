@@ -43,7 +43,7 @@ if uploaded_file:
     db = FAISS.from_documents(chunks, embeddings)
 
     # Model loading with error handling
- llm = ChatOpenAI(
+    llm = ChatOpenAI(
         model="mistralai/mistral-small-3.1-24b-instruct:free",  # or any model you want from OpenRouter
         openai_api_base="https://openrouter.ai/api/v1",
         openai_api_key=hf_token 
