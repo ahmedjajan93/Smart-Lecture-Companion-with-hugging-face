@@ -13,11 +13,6 @@ import os
 import torch
 import re
 
-
-
-
-
-# Set up Hugging Face API token securely (using Streamlit Secrets Manager)
 hf_token = os.getenv('OPEAN_API')
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
