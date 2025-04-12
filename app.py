@@ -8,16 +8,17 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import tempfile
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 from langchain.llms import HuggingFacePipeline
+from langchain.chat_models import ChatOpenAI
 import os
 import torch
 import re
 
-# Set up Hugging Face API token securely (using Streamlit Secrets Manager)
-hf_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
-if not hf_token:
-    st.error("Hugging Face API token not found. Please configure it in Streamlit Secrets.")
-    st.stop()
 
+
+
+
+# Set up Hugging Face API token securely (using Streamlit Secrets Manager)
+hf_token = os.getenv('OPEAN_API')
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
 st.title("📚 Smart Lecture Companion")
@@ -42,28 +43,13 @@ if uploaded_file:
     db = FAISS.from_documents(chunks, embeddings)
 
     # Model loading with error handling
-    model_name = "meta-llama/Llama-3.2-3B-Instruct"
-    try:
-        # Manually load tokenizer and model
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+   llm = ChatOpenAI(
+        model="mistralai/mistral-small-3.1-24b-instruct:free",  # or any model you want from OpenRouter
+        openai_api_base="https://openrouter.ai/api/v1",
+        openai_api_key=hf_token 
+)
 
-        # Set up pipeline
-        rag_pipeline = pipeline(
-            "text2text-generation",
-            model=model,
-            tokenizer=tokenizer,
-            max_length=512,
-            do_sample=True,
-            temperature=0.7
-        )
-
-        # Wrap in LangChain LLM interface
-        llm = HuggingFacePipeline(pipeline=rag_pipeline)
-
-    except Exception as e:
-        st.error(f"❌ Failed to load model: {e}")
-        st.stop()
+ 
 
     # Set up QA system
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
