@@ -19,7 +19,7 @@ import re
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 if hf_token is None:
-    st.error("🚨 Hugging Face API token not found in environment variables.")
+    st.error("🚨 Hugging Face API token not found.")
     st.stop()
 else:
     os.environ["HUGGINGFACEHUB_API_TOKEN"] = hf_token
