@@ -44,7 +44,7 @@ if uploaded_file:
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
 
-    embeddings = HuggingFaceEmbeddings(model_name="mistralai/Mistral-7B-Instruct-v0.3")
+    embeddings = HuggingFaceEmbeddings(model_name="mistralai/Mistral-Small-3.1-24B-Instruct-2503")
     db = FAISS.from_documents(chunks, embeddings)
 
     # Set up QA system
