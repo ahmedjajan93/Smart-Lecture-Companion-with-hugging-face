@@ -42,7 +42,7 @@ if uploaded_file:
     db = FAISS.from_documents(chunks, embeddings)
 
     # Model loading with error handling
-    model_name = "mistralai/Mistral-Small-24B-Instruct-2501"
+    model_name = "meta-llama/Llama-3.2-3B-Instruct"
     try:
         # Manually load tokenizer and model
         tokenizer = AutoTokenizer.from_pretrained(model_name)
