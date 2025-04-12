@@ -17,7 +17,7 @@ import re
 
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+hf_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
 st.title("📚 Smart Lecture Companion")
 
@@ -36,11 +36,11 @@ if uploaded_file:
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
 
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2", huggingfacehub_api_token=hf_token)
     db = FAISS.from_documents(chunks, embeddings)
 
     # Set up QA system
-    rag_pipeline = pipeline("text2text-generation", model="mistralai/Mistral-7B-Instruct-v0.2", max_length=512)
+    rag_pipeline = pipeline("text2text-generation", model="mistralai/Mistral-7B-Instruct-v0.2", max_length=512, huggingfacehub_api_token=hf_token)
     llm = HuggingFacePipeline(pipeline=rag_pipeline)
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
