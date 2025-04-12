@@ -14,17 +14,23 @@ import os
 import torch
 from langchain.llms import Ollama
 import re
-
 from huggingface_hub import login
-login()
+
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-if hf_token is None:
-    st.error("🚨 Hugging Face API token not found.")
+# Authenticate with Hugging Face (using Streamlit secrets)
+try:
+   
+    hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+except:
+    hf_token = os.getenv("HUGGINGFACE_TOKEN")
+
+if not hf_token:
+    st.error("🔑 Hugging Face token not found! Set it in secrets.toml or environment variables.")
     st.stop()
-else:
-    os.environ["HUGGINGFACEHUB_API_TOKEN"] = hf_token
+
+# Log in to Hugging Face Hub
+login(token=hf_token)
 
 
 
