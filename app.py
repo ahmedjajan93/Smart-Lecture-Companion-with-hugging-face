@@ -65,7 +65,7 @@ llm = HuggingFacePipeline(pipeline=rag_pipeline)
 
 qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
-t.header("Ask Questions About Your Lecture 📖")
+st.header("Ask Questions About Your Lecture 📖")
 query = st.text_input("What would you like to know?")
 
 if query:
