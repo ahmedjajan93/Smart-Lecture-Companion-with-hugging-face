@@ -41,6 +41,7 @@ if uploaded_file:
 
     # Set up QA system
     llm = HuggingFaceHub(
+    'text2text-generation',
     repo_id="google/flan-t5-base",
     huggingfacehub_api_token=hf_token
 )
