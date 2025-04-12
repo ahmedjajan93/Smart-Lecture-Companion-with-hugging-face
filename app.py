@@ -40,8 +40,8 @@ if uploaded_file:
     db = FAISS.from_documents(chunks, embeddings)
 
     # Set up QA system
-    rag_pipeline = pipeline("text2text-generation", model="mistralai/Mistral-7B-Instruct-v0.2", max_length=512, huggingfacehub_api_token=hf_token)
-    llm = HuggingFacePipeline(pipeline=rag_pipeline)
+    rag_pipeline = pipeline("text2text-generation", model="mistralai/Mistral-7B-Instruct-v0.2", max_length=512)
+    llm = HuggingFacePipeline(pipeline=rag_pipeline,, huggingfacehub_api_token=hf_token)
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
     st.header("Ask Questions About Your Lecture 📖")
