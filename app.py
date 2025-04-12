@@ -12,21 +12,13 @@ from transformers import pipeline
 from langchain.llms import HuggingFacePipeline
 import os
 import torch
-from langchain.llms import Ollama
 import re
-from huggingface_hub import login
+
 
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+s.environ['HUGGINGFACEHUB_API_TOKEN'] = os.environ.get('HUGGINGFACEHUB_API_TOKEN')
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-if not hf_token:
-    st.error("🔑 Hugging Face token not found! Set it in secrets.toml or environment variables.")
-    st.stop()
-
-# Log in to Hugging Face Hub
-login(token=hf_token)
-
-
 
 st.set_page_config(page_title="Smart Lecture Companion", layout="wide")
 st.title("📚 Smart Lecture Companion")
@@ -46,11 +38,11 @@ if uploaded_file:
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
 
-    embeddings = HuggingFaceEmbeddings(model_name="mistralai/Mistral-7B-Instruct-v0.2")
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     db = FAISS.from_documents(chunks, embeddings)
 
     # Set up QA system
-    rag_pipeline = pipeline("text2text-generation", model="google/flan-t5-base", max_length=512)
+    rag_pipeline = pipeline("text2text-generation", model="mistralai/Mistral-7B-Instruct-v0.2", max_length=512)
     llm = HuggingFacePipeline(pipeline=rag_pipeline)
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
