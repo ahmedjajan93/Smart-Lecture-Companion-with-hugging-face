@@ -4,6 +4,7 @@ langchain-community
 python-dotenv
 PyMuPDF
 sentence-transformers
+transformers
 torch
 faiss-cpu
 
