@@ -10,6 +10,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import tempfile
 from transformers import pipeline
 from langchain_community.llms import HuggingFaceHub
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
+from langchain.llms import HuggingFacePipeline
 import os
 import torch
 import re
@@ -38,13 +40,29 @@ if uploaded_file:
 
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     db = FAISS.from_documents(chunks, embeddings)
+  
 
-    # Set up QA system
-    llm = HuggingFaceHub(
-    
-    repo_id="google/flan-t5-large",
-    huggingfacehub_api_token=hf_token
+model_name = "google/flan-t5-large"
+
+# Manually load tokenizer and model
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+# Set up pipeline
+rag_pipeline = pipeline(
+    "text2text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    max_length=512,
+    do_sample=True,
+    temperature=0.7
 )
+
+# Wrap in LangChain LLM interface
+llm = HuggingFacePipeline(pipeline=rag_pipeline)
+
+
+
     qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 
     st.header("Ask Questions About Your Lecture 📖")
