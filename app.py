@@ -18,13 +18,7 @@ from huggingface_hub import login
 
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-# Authenticate with Hugging Face (using Streamlit secrets)
-try:
-   
-    hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-except:
-    hf_token = os.getenv("HUGGINGFACE_TOKEN")
-
+hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 if not hf_token:
     st.error("🔑 Hugging Face token not found! Set it in secrets.toml or environment variables.")
     st.stop()
