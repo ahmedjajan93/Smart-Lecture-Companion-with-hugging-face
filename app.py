@@ -9,7 +9,7 @@ from langchain.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import tempfile
 from transformers import pipeline
-from langchain.llms import HuggingFacePipeline
+from langchain_community.llms import HuggingFaceHub
 import os
 import torch
 import re
